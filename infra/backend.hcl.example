@@ -1,0 +1,4 @@
+# Copy to backend.hcl (git-ignored), fill in from `terraform output` in bootstrap/,
+# then run:  terraform init -backend-config=backend.hcl
+bucket     = "portfolio-tfstate-<ACCOUNT_ID>-us-east-2"
+kms_key_id = "arn:aws:kms:us-east-2:<ACCOUNT_ID>:key/<KEY_ID>"
