@@ -49,7 +49,10 @@ jobs:
 
       - name: Invalidate CloudFront cache (once the site exists)
         run: |
-          if DIST_ID=$(terraform output -raw distribution_id 2>/dev/null); then
+          # Only a real CloudFront ID (e.g. E2ABC123XYZ) triggers an invalidation;
+          # empty output or a "No outputs found" warning is skipped.
+          DIST_ID=$(terraform output -raw distribution_id 2>/dev/null || true)
+          if echo "$DIST_ID" | grep -Eq '^E[A-Z0-9]+$'; then
             aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
           else
             echo "No distribution yet, skipping invalidation."
