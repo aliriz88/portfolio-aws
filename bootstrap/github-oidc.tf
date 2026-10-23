@@ -7,6 +7,21 @@
 #   apply - only jobs running in the "production" GitHub environment,
 #           which requires your manual approval
 
+# GitHub's token "sub" claim can come in two formats:
+#   classic:       repo:owner/repo:<context>
+#   immutable IDs: repo:owner@<owner_id>/repo@<repo_id>:<context>
+# The IDs never change, even if the owner or repo is renamed, so a deleted and
+# re-created repo with the same name can't impersonate this one. We accept both.
+locals {
+  github_owner = split("/", var.github_repo)[0]
+  github_name  = split("/", var.github_repo)[1]
+
+  github_sub_prefixes = [
+    "repo:${var.github_repo}",
+    "repo:${local.github_owner}@${var.github_owner_id}/${local.github_name}@${var.github_repo_id}",
+  ]
+}
+
 resource "aws_iam_openid_connect_provider" "github" {
   url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
@@ -31,7 +46,7 @@ data "aws_iam_policy_document" "plan_trust" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repo}:pull_request"]
+      values   = [for p in local.github_sub_prefixes : "${p}:pull_request"]
     }
   }
 }
@@ -102,7 +117,7 @@ data "aws_iam_policy_document" "apply_trust" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repo}:environment:production"]
+      values   = [for p in local.github_sub_prefixes : "${p}:environment:production"]
     }
   }
 }

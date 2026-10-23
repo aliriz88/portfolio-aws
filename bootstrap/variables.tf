@@ -25,6 +25,16 @@ variable "github_repo" {
   }
 }
 
+variable "github_owner_id" {
+  description = "Numeric ID of the GitHub user or org that owns the repo (part of GitHub's OIDC sub claim)"
+  type        = string
+}
+
+variable "github_repo_id" {
+  description = "Numeric ID of the GitHub repo (part of GitHub's OIDC sub claim)"
+  type        = string
+}
+
 variable "monthly_budget_usd" {
   description = "Monthly budget; you get emails at 50% actual and 100% forecast"
   type        = number
