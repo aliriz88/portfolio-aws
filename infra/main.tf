@@ -2,19 +2,19 @@
 # Each block below is uncommented in its phase of the build guide.
 
 # ---------- Phase 2: static site (S3 + CloudFront + KMS) ----------
-# module "static_site" {
-#   source   = "../modules/static-site"
-#   project  = var.project
-#   site_dir = "${path.root}/../website"
-#
-#   # Phase 3: add the generated config.js
-#   # generated_files = {
-#   #   "config.js" = "window.API_URL = \"${module.counter_api.api_url}\";"
-#   # }
-#
-#   # Phase 4: attach the WAF web ACL
-#   # web_acl_arn = var.enable_waf ? module.waf[0].web_acl_arn : null
-# }
+module "static_site" {
+  source   = "../modules/static-site"
+  project  = var.project
+  site_dir = "${path.root}/../website"
+
+  #   # Phase 3: add the generated config.js
+  #   # generated_files = {
+  #   #   "config.js" = "window.API_URL = \"${module.counter_api.api_url}\";"
+  #   # }
+  #
+  #   # Phase 4: attach the WAF web ACL
+  #   # web_acl_arn = var.enable_waf ? module.waf[0].web_acl_arn : null
+}
 
 # ---------- Phase 3: visitor counter API ----------
 # module "counter_api" {
