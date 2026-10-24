@@ -13,7 +13,7 @@ module "static_site" {
   }
   #
   #   # Phase 4: attach the WAF web ACL
-  #   # web_acl_arn = var.enable_waf ? module.waf[0].web_acl_arn : null
+  web_acl_arn = var.enable_waf ? module.waf[0].web_acl_arn : null
 }
 
 # ---------- Phase 3: visitor counter API ----------
@@ -25,12 +25,12 @@ module "counter_api" {
 }
 
 # ---------- Phase 4: WAF (us-east-1, required for CloudFront) ----------
-# module "waf" {
-#   source    = "../modules/waf"
-#   count     = var.enable_waf ? 1 : 0
-#   providers = { aws = aws.us_east_1 }
-#   project   = var.project
-# }
+module "waf" {
+  source    = "../modules/waf"
+  count     = var.enable_waf ? 1 : 0
+  providers = { aws = aws.us_east_1 }
+  project   = var.project
+}
 
 # ---------- Phase 5: continuous compliance (Config + Security Hub) ----------
 # module "compliance" {
