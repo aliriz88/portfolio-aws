@@ -8,21 +8,21 @@ module "static_site" {
   site_dir = "${path.root}/../website"
 
   #   # Phase 3: add the generated config.js
-  #   # generated_files = {
-  #   #   "config.js" = "window.API_URL = \"${module.counter_api.api_url}\";"
-  #   # }
+  generated_files = {
+    "config.js" = "window.API_URL = \"${module.counter_api.api_url}\";"
+  }
   #
   #   # Phase 4: attach the WAF web ACL
   #   # web_acl_arn = var.enable_waf ? module.waf[0].web_acl_arn : null
 }
 
 # ---------- Phase 3: visitor counter API ----------
-# module "counter_api" {
-#   source             = "../modules/counter-api"
-#   project            = var.project
-#   allowed_origin     = module.static_site.site_url
-#   lambda_source_file = "${path.root}/../lambda/counter.py"
-# }
+module "counter_api" {
+  source             = "../modules/counter-api"
+  project            = var.project
+  allowed_origin     = module.static_site.site_url
+  lambda_source_file = "${path.root}/../lambda/counter.py"
+}
 
 # ---------- Phase 4: WAF (us-east-1, required for CloudFront) ----------
 # module "waf" {
