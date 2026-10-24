@@ -14,10 +14,10 @@ output "distribution_id" {
 }
 
 # Phase 3
-# output "api_url" {
-#   value = module.counter_api.api_url
-# }
-#
-# output "table_name" {
-#   value = module.counter_api.table_name
-# }
+output "api_url" {
+  value = module.counter_api.api_url
+}
+
+output "table_name" {
+  value = module.counter_api.table_name
+}
