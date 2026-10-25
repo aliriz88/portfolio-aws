@@ -33,9 +33,9 @@ module "waf" {
 }
 
 # ---------- Phase 5: continuous compliance (Config + Security Hub) ----------
-# module "compliance" {
-#   source              = "../modules/compliance"
-#   count               = var.enable_compliance ? 1 : 0
-#   project             = var.project
-#   enable_security_hub = var.enable_security_hub
-# }
+module "compliance" {
+  source              = "../modules/compliance"
+  count               = var.enable_compliance ? 1 : 0
+  project             = var.project
+  enable_security_hub = var.enable_security_hub
+}
